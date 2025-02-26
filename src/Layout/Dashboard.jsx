@@ -5,10 +5,11 @@ import useAdmin from "../hooks/useAdmin";
 
 
 const Dashboard = () => {
-    const [cart] = useCart();
+    // const [cart] = useCart();
 
     // TODO: get isAdmin value from the database
-    const [isAdmin] = useAdmin();
+    // const [isAdmin] = useAdmin();
+    const isAdmin = true;
 
     return (
         <div className="flex">
@@ -23,24 +24,19 @@ const Dashboard = () => {
                                     Admin Home</NavLink>
                             </li>
                             <li>
-                                <NavLink to="/dashboard/addItems">
-                                    <FaUtensils></FaUtensils>
-                                    Add Items</NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/dashboard/manageItems">
-                                    <FaList></FaList>
-                                    Manage Items</NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/dashboard/bookings">
-                                    <FaBook></FaBook>
-                                    Manage Bookings</NavLink>
-                            </li>
-                            <li>
                                 <NavLink to="/dashboard/users">
                                     <FaUsers></FaUsers>
                                     All Users</NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/employee">
+                                    <FaUsers></FaUsers>
+                                    All Employee</NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/work">
+                                    <FaUsers></FaUsers>
+                                    Employee Working</NavLink>
                             </li>
                         </>
                             :

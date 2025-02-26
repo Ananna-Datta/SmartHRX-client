@@ -3,23 +3,26 @@ import {
   } from "react-router-dom";
 import Main from "../Layout/Main";
 import Home from "../pages/Home/Home/Home";
-import Menu from "../pages/Menu/Menu/Menu";
-import Order from "../pages/Order/Order/Order";
+// import Menu from "../pages/Menu/Menu/Menu";
+// import Order from "../pages/Order/Order/Order";
 import Login from "../pages/Login/Login";
 import SignUp from "../pages/SignUp/SignUp";
 import PrivateRoute from "./PrivateRoute";
-import Secret from "../pages/Shared/Secret/Secret";
+// import Secret from "../pages/Shared/Secret/Secret";
+import Contact from "../pages/Contact/Contact";
 import Dashboard from "../Layout/Dashboard";
-import Cart from "../pages/Dashboard/Cart/Cart";
+// import Cart from "../pages/Dashboard/Cart/Cart";
 import AllUsers from "../pages/Dashboard/AllUsers/AllUsers";
-import AddItems from "../pages/Dashboard/AddItems/AddItems";
+// import AddItems from "../pages/Dashboard/AddItems/AddItems";
 import AdminRoute from "./AdminRoute";
-import ManageItems from "../pages/Dashboard/ManageItems/ManageItems";
-import UpdateItem from "../pages/Dashboard/UpdateItem/UpdateItem";
-import Payment from "../pages/Dashboard/Payment/Payment";
-import PaymentHistory from "../pages/Dashboard/PaymentHistory/PaymentHistory";
+// import ManageItems from "../pages/Dashboard/ManageItems/ManageItems";
+// import UpdateItem from "../pages/Dashboard/UpdateItem/UpdateItem";
+// import Payment from "../pages/Dashboard/Payment/Payment";
+// import PaymentHistory from "../pages/Dashboard/PaymentHistory/PaymentHistory";
 import UserHome from "../pages/Dashboard/UserHome/UserHome";
 import AdminHome from "../pages/Dashboard/AdminHome/AdminHome";
+import AllEmployee from "../pages/Dashboard/AllUsers/AllEmployee";
+import EmployeeWorkLog from "../pages/Dashboard/AllUsers/EmployeeWorkLog";
 
 
   export const router = createBrowserRouter([
@@ -32,12 +35,8 @@ import AdminHome from "../pages/Dashboard/AdminHome/AdminHome";
             element: <Home></Home>
         }, 
         {
-          path: 'menu', 
-          element: <Menu></Menu>
-        },
-        {
-          path: 'order/:category',
-          element: <Order></Order>
+          path: '/contact', 
+          element: <Contact></Contact>
         },
         {
           path: 'login',
@@ -47,55 +46,51 @@ import AdminHome from "../pages/Dashboard/AdminHome/AdminHome";
           path: 'signup',
           element: <SignUp></SignUp>
         },
-        {
-          path: 'secret',
-          element: <PrivateRoute><Secret></Secret></PrivateRoute>
-        }
       ]
     },
     {
       path: 'dashboard',
-      element: <PrivateRoute><Dashboard></Dashboard></PrivateRoute>,
+      element:<Dashboard></Dashboard>,
       children: [
-        // normal user routes
+    //     // normal user routes
         {
           path: 'userHome',
           element: <UserHome></UserHome>
         },
-        {
-          path: 'cart',
-          element: <Cart></Cart>
-        },
-        {
-          path: 'payment',
-          element: <Payment></Payment>
-        },
-        {
-          path: 'paymentHistory',
-          element: <PaymentHistory></PaymentHistory>
-        },
+        // {
+        //   path: 'cart',
+        //   element: <Cart></Cart>
+        // },
+        // {
+        //   path: 'payment',
+        //   element: <Payment></Payment>
+        // },
+        // {
+        //   path: 'paymentHistory',
+        //   element: <PaymentHistory></PaymentHistory>
+        // },
 
         // admin only routes
         {
           path: 'adminHome',
-          element: <AdminRoute><AdminHome></AdminHome></AdminRoute>
+          element:<AdminHome></AdminHome>
         },
-        {
-          path: 'addItems',
-          element: <AdminRoute><AddItems></AddItems></AdminRoute>
-        },
-        {
-          path: 'manageItems',
-          element: <AdminRoute><ManageItems></ManageItems></AdminRoute>
-        },
-        {
-          path: 'updateItem/:id',
-          element: <AdminRoute><UpdateItem></UpdateItem></AdminRoute>,
-          loader: ({params}) => fetch(`https://bistro-boss-server-seven-sage.vercel.app/menu/${params.id}`)
-        },
+        // {
+        //   path: 'updateItem/:id',
+        //   element: <AdminRoute><UpdateItem></UpdateItem></AdminRoute>,
+        //   loader: ({params}) => fetch(`https://bistro-boss-server-seven-sage.vercel.app/menu/${params.id}`)
+        // },
         {
           path: 'users',
-          element: <AdminRoute><AllUsers></AllUsers></AdminRoute>
+          element: <AllUsers></AllUsers>
+        },
+        {
+          path: 'employee',
+          element: <AllEmployee></AllEmployee>
+        },
+        {
+          path: 'work',
+          element: <EmployeeWorkLog></EmployeeWorkLog>
         }
 
       ]
