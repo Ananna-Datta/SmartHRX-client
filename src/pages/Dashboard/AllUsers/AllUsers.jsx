@@ -5,25 +5,25 @@ import Swal from "sweetalert2";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 
 const AllUsers = () => {
-    const axiosPublic = useAxiosPublic();
-    const axiosSecure = useAxiosSecure();  // Secure Axios instance
+    const axiosSecure = useAxiosSecure();
+    // const axiosSecure = useAxiosSecure();  // Secure Axios instance
     const { data: users = [], refetch, isLoading } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {
-            const res = await axiosPublic.get('/users');
+            const res = await axiosSecure.get('/users');
             return res.data;
         }
     });
 
-    const handleMakeAdmin = (user) => {
-        axiosSecure.patch(`/users/admin/${user._id}`)
+    const handleMakeHR = (user) => {
+        axiosSecure.patch(`/users/HR/${user._id}`)
             .then(res => {
                 if (res.data.modifiedCount > 0) {
                     refetch();
                     Swal.fire({
                         position: "top-end",
                         icon: "success",
-                        title: `${user.name} is now an Admin!`,
+                        title: `${user.name} is now an HR!`,
                         showConfirmButton: false,
                         timer: 1500
                     });
@@ -92,11 +92,11 @@ const AllUsers = () => {
                                         <td>{user.name}</td>
                                         <td>{user.email}</td>
                                         <td>
-                                            {user.role === 'admin' ? (
-                                                "Admin"
+                                            {user.role === 'HR' ? (
+                                                "HR"
                                             ) : (
                                                 <button
-                                                    onClick={() => handleMakeAdmin(user)}
+                                                    onClick={() => handleMakeHR(user)}
                                                     className="btn btn-lg bg-orange-500"
                                                 >
                                                     <FaUsers className="text-white text-2xl" />

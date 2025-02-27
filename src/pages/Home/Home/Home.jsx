@@ -6,6 +6,9 @@ import PopularMenu from "../PopularMenu/PopularMenu";
 import Testimonials from "../Testimonials/Testimonials";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
+import Services from "../../Login/Sevices/Services";
+import EmployeePerformance from "../Testimonials/EmployeePerformance";
+import EmployeeAttendance from "../Testimonials/EmployeeAttendance";
 
 const Home = () => {
 
@@ -24,11 +27,13 @@ const Home = () => {
                 <title>SmartHRX | Home</title>
             </Helmet>
             <Banner></Banner>
-            <h2 className="text-3xl">Total Users: {users.length}</h2>
-            {/* <Category></Category>
-            <PopularMenu></PopularMenu>
+            {/* <h2 className="text-3xl">Total Users: {users.length}</h2> */} */}
+             {/* <Category></Category> */}
+            <Services></Services>
             <Featured></Featured>
-            <Testimonials></Testimonials> */}
+            <Testimonials></Testimonials>
+            <EmployeePerformance></EmployeePerformance>
+            <EmployeeAttendance></EmployeeAttendance>
 
 
         </div>

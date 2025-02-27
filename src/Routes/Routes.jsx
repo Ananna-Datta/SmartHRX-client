@@ -17,12 +17,16 @@ import AllUsers from "../pages/Dashboard/AllUsers/AllUsers";
 import AdminRoute from "./AdminRoute";
 // import ManageItems from "../pages/Dashboard/ManageItems/ManageItems";
 // import UpdateItem from "../pages/Dashboard/UpdateItem/UpdateItem";
-// import Payment from "../pages/Dashboard/Payment/Payment";
-// import PaymentHistory from "../pages/Dashboard/PaymentHistory/PaymentHistory";
+import Payment from "../pages/Dashboard/Payment/Payment";
+import PaymentHistory from "../pages/Dashboard/PaymentHistory/PaymentHistory";
 import UserHome from "../pages/Dashboard/UserHome/UserHome";
 import AdminHome from "../pages/Dashboard/AdminHome/AdminHome";
 import AllEmployee from "../pages/Dashboard/AllUsers/AllEmployee";
 import EmployeeWorkLog from "../pages/Dashboard/AllUsers/EmployeeWorkLog";
+import ViewDetails from "../pages/Dashboard/Details/ViewDetails";
+import Services from "../pages/Login/Sevices/Services";
+import EmployeePerformance from "../pages/Home/Testimonials/EmployeePerformance";
+import EmployeeAttendance from "../pages/Home/Testimonials/EmployeeAttendance";
 
 
   export const router = createBrowserRouter([
@@ -46,6 +50,18 @@ import EmployeeWorkLog from "../pages/Dashboard/AllUsers/EmployeeWorkLog";
           path: 'signup',
           element: <SignUp></SignUp>
         },
+        {
+          path: 'services',
+          element: <Services></Services>
+        },
+        {
+          path: 'employeePerformance',
+          element: <EmployeePerformance></EmployeePerformance>
+        },
+        {
+          path: 'EmployeeAttendance',
+          element: <EmployeeAttendance></EmployeeAttendance>
+        },
       ]
     },
     {
@@ -57,18 +73,21 @@ import EmployeeWorkLog from "../pages/Dashboard/AllUsers/EmployeeWorkLog";
           path: 'userHome',
           element: <UserHome></UserHome>
         },
-        // {
-        //   path: 'cart',
-        //   element: <Cart></Cart>
-        // },
-        // {
-        //   path: 'payment',
-        //   element: <Payment></Payment>
-        // },
-        // {
-        //   path: 'paymentHistory',
-        //   element: <PaymentHistory></PaymentHistory>
-        // },
+        { 
+          path: "details/:id",  // Ensure it's properly nested with "dashboard"
+          element: <ViewDetails />,
+          loader: ({ params }) => fetch(`/details/${params.id}`), // Fetch data based on the id parameter
+        },
+      
+        
+        {
+          path: 'payment',
+          element: <Payment></Payment>
+        },
+        {
+          path: 'payment-history',
+          element: <PaymentHistory></PaymentHistory>
+        },
 
         // admin only routes
         {

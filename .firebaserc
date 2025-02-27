@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "bistro-boss-4c0b8"
-  }
+    "default": "smarthrx-d90f9"
+  },
+  "targets": {},
+  "etags": {}
 }

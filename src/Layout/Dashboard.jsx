@@ -1,95 +1,107 @@
-import { FaAd, FaBook, FaCalendar, FaEnvelope, FaHome, FaList, FaSearch, FaShoppingCart, FaUsers, FaUtensils } from "react-icons/fa";
+import { FaHome, FaUsers, FaEnvelope, FaMoneyCheck, FaMoneyBill } from "react-icons/fa";
 import { NavLink, Outlet } from "react-router-dom";
-import useCart from "../hooks/useCart";
-import useAdmin from "../hooks/useAdmin";
-
+import { useEffect, useState } from "react";
+import useAuth from "../hooks/useAuth";
+import useAxiosPublic from "../hooks/useAxiosPublic";
 
 const Dashboard = () => {
-    // const [cart] = useCart();
+    const axiosPublic = useAxiosPublic();
+    const { user } = useAuth();
+    const [role, setRole] = useState(null);
 
-    // TODO: get isAdmin value from the database
-    // const [isAdmin] = useAdmin();
-    const isAdmin = true;
+    useEffect(() => {
+        if (user?.email) {
+            axiosPublic.get(`/users`)
+                .then(res => {
+                    const loggedInUser = res.data.find(u => u.email === user.email);
+                    if (loggedInUser) {
+                        setRole(loggedInUser.role.toLowerCase()); 
+                    } 
+                })
+                .catch(error => {
+                    // console.error("Error fetching users:", error);
+                });
+        }
+    }, [axiosPublic, user]);
+
+    console.log("User Role:", role);
 
     return (
         <div className="flex">
-            {/* dashboard side bar */}
+            {/* Sidebar */}
             <div className="w-64 min-h-screen bg-orange-400">
                 <ul className="menu p-4">
-                    {
-                        isAdmin ? <>
+                    {role === "admin" && (
+                        <>
                             <li>
                                 <NavLink to="/dashboard/adminHome">
-                                    <FaHome></FaHome>
-                                    Admin Home</NavLink>
+                                    <FaHome /> Admin Home
+                                </NavLink>
                             </li>
                             <li>
                                 <NavLink to="/dashboard/users">
-                                    <FaUsers></FaUsers>
-                                    All Users</NavLink>
+                                    <FaUsers /> All Users
+                                </NavLink>
                             </li>
                             <li>
-                                <NavLink to="/dashboard/employee">
-                                    <FaUsers></FaUsers>
-                                    All Employee</NavLink>
+                                <NavLink to="/dashboard/payment">
+                                    <FaMoneyCheck /> Payroll
+                                </NavLink>
                             </li>
-                            <li>
-                                <NavLink to="/dashboard/work">
-                                    <FaUsers></FaUsers>
-                                    Employee Working</NavLink>
-                            </li>
+                            
                         </>
-                            :
-                            <>
-                                <li>
-                                    <NavLink to="/dashboard/userHome">
-                                        <FaHome></FaHome>
-                                        User Home</NavLink>
-                                </li>
-                                <li>
-                                    <NavLink to="/dashboard/history">
-                                        <FaCalendar></FaCalendar>
-                                        Not History</NavLink>
-                                </li>
-                                <li>
-                                    <NavLink to="/dashboard/cart">
-                                        <FaShoppingCart></FaShoppingCart>
-                                        My Cart ({cart.length})</NavLink>
-                                </li>
-                                <li>
-                                    <NavLink to="/dashboard/review">
-                                        <FaAd></FaAd>
-                                        Add a Review</NavLink>
-                                </li>
-                                <li>
-                                    <NavLink to="/dashboard/paymentHistory">
-                                        <FaList></FaList>
-                                        Real Payment History</NavLink>
-                                </li>
-                            </>
-                    }
-                    {/* shared nav links */}
+                    )}
+
+                    {role === "hr" && (
+                        <>
+                        <li>
+                            <NavLink to="/dashboard/AdminHome">
+                                <FaHome /> HR Dashboard
+                            </NavLink>
+                        </li>
+                        <li>
+                        <NavLink to="/dashboard/employee">
+                            <FaUsers /> All Employees
+                        </NavLink>
+                    </li></>
+                    )}
+
+                    {role === "employee" && (
+                        <>
+                        <li>
+                            <NavLink to="/dashboard/userHome">
+                                <FaHome /> User Home
+                            </NavLink>
+                        </li>
+                        <li>
+                        <NavLink to="/dashboard/work">
+                            <FaUsers /> Employee Working
+                        </NavLink>
+                        <NavLink to="/dashboard/payment-history">
+                            <FaMoneyBill /> Payment History
+                        </NavLink>
+                    </li>
+                    </>
+                    )}
+
+                    {/* Shared Navigation */}
                     <div className="divider"></div>
                     <li>
                         <NavLink to="/">
-                            <FaHome></FaHome>
-                            Home</NavLink>
+                            <FaHome /> Home
+                        </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/order/salad">
-                            <FaSearch></FaSearch>
-                            Menu</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/order/contact">
-                            <FaEnvelope></FaEnvelope>
-                            Contact</NavLink>
+                        <NavLink to="/contact">
+                            <FaEnvelope /> Contact
+                        </NavLink>
                     </li>
                 </ul>
             </div>
-            {/* dashboard content */}
+
+            {/* Dashboard Content */}
             <div className="flex-1 p-8">
-                <Outlet></Outlet>
+                <Outlet />
             </div>
         </div>
     );
