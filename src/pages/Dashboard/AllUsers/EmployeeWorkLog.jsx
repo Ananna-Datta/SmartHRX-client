@@ -18,14 +18,22 @@ const EmployeeWorkLog = () => {
 
   // Local loading state for fetching and submitting tasks
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (user && user.email) {
       // Set loading state to true while fetching work logs
       setLoading(true);
-      axiosSecure.get("/work")
+      setError(null); // Reset any previous errors before fetching
+
+      axiosSecure
+        .get(`/work/${user.email}`)
         .then((res) => {
           setWorkLogs(res.data);
+        })
+        .catch((err) => {
+          setError("An error occurred while fetching work logs.");
+          console.error("Error fetching work logs:", err);
         })
         .finally(() => {
           setLoading(false); // Turn off loading when done fetching
@@ -84,22 +92,24 @@ const EmployeeWorkLog = () => {
       hoursWorked: parseInt(hours, 10), // Ensure hours is an integer
       date 
     };
-  
+
     try {
       await axiosSecure.put(`/work/${currentLog._id}`, updatedLog);
-      
-      setWorkLogs(workLogs.map((log) => 
+
+      // Optimistic UI Update: Directly update the workLogs state
+      setWorkLogs(workLogs.map((log) =>
         log._id === currentLog._id ? { ...updatedLog, _id: log._id } : log
       ));
-  
+
+      // Close the edit modal immediately
       setEditModal(false);
+
       Swal.fire("Updated", "Task updated successfully!", "success");
     } catch (error) {
       console.error("Error updating work log:", error);
       Swal.fire("Error", "Failed to update work log.", "error");
     }
   };
-  
 
   const handleDelete = async (id) => {
     await axiosSecure.delete(`/work/${id}`);

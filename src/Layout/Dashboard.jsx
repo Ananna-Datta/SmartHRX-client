@@ -72,11 +72,6 @@ const Dashboard = () => {
                     {role === "employee" && (
                         <>
                         <li>
-                            <NavLink to="/dashboard/userHome">
-                                <FaHome /> User Home
-                            </NavLink>
-                        </li>
-                        <li>
                         <NavLink to="/dashboard/work">
                             <FaUsers /> Employee Working
                         </NavLink>
