@@ -49,6 +49,7 @@ const EmployeeWorkLog = () => {
       hoursWorked: parseInt(hours),
       date,
       email: user.email,
+      userId: user._id,
     };
 
     // Set loading state to true during submission

@@ -2,6 +2,7 @@ import { FaGoogle } from "react-icons/fa";
 import useAuth from "../../hooks/useAuth";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 
 const SocialLogin = () => {
@@ -20,6 +21,13 @@ const SocialLogin = () => {
             axiosPublic.post('/users', userInfo)
             .then(res =>{
                 console.log(res.data);
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "User created successfully!",
+                    showConfirmButton: false, 
+                    timer: 1500
+                });
                 navigate('/');
             })
         })

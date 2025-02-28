@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 
+
 const Dashboard = () => {
     const axiosPublic = useAxiosPublic();
     const { user } = useAuth();
@@ -25,11 +26,13 @@ const Dashboard = () => {
     }, [axiosPublic, user]);
 
     console.log("User Role:", role);
+    // console.log(cart);
+
 
     return (
         <div className="flex">
             {/* Sidebar */}
-            <div className="w-64 min-h-screen bg-orange-400">
+            <div className="w-64 min-h-screen bg-orange-400 pt-9">
                 <ul className="menu p-4">
                     {role === "admin" && (
                         <>
@@ -55,9 +58,9 @@ const Dashboard = () => {
                     {role === "hr" && (
                         <>
                         <li>
-                            <NavLink to="/dashboard/AdminHome">
-                                <FaHome /> HR Dashboard
-                            </NavLink>
+                        <NavLink to="/dashboard/worklog">
+                            <FaUsers /> Employee Working.........
+                        </NavLink>
                         </li>
                         <li>
                         <NavLink to="/dashboard/employee">

@@ -18,7 +18,9 @@ const CheckoutForm = () => {
     const [cart, refetch] = useCart();
     const navigate = useNavigate();
 
-    const totalPrice = cart.reduce((total, item) => total + item.price, 0)
+    const userEmail= user?.email;
+    const salaryDetails = cart.filter(use => use.email === userEmail);
+    const totalPrice=salaryDetails[0]?.salary
 
     useEffect(() => {
         if (totalPrice > 0) {
@@ -100,7 +102,7 @@ const CheckoutForm = () => {
                         showConfirmButton: false,
                         timer: 1500
                     });
-                    navigate('/dashboard/paymentHistory')
+                    // navigate('/dashboard/paymentHistory')
                 }
 
             }

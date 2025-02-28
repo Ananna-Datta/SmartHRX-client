@@ -27,6 +27,8 @@ import ViewDetails from "../pages/Dashboard/Details/ViewDetails";
 import Services from "../pages/Login/Sevices/Services";
 import EmployeePerformance from "../pages/Home/Testimonials/EmployeePerformance";
 import EmployeeAttendance from "../pages/Home/Testimonials/EmployeeAttendance";
+import SalaryChart from "../pages/Dashboard/Details/SalaryChart";
+import Worklog from "../pages/Dashboard/AllUsers/Worklog";
 
 
   export const router = createBrowserRouter([
@@ -62,6 +64,15 @@ import EmployeeAttendance from "../pages/Home/Testimonials/EmployeeAttendance";
           path: 'EmployeeAttendance',
           element: <EmployeeAttendance></EmployeeAttendance>
         },
+        { 
+          path: "details/:id",  // Ensure it's properly nested with "dashboard"
+          element: <ViewDetails />,
+          loader: ({ params }) => fetch(`/details/${params.id}`), // Fetch data based on the id parameter
+        },
+        { 
+          path: "salary",  // Ensure it's properly nested with "dashboard"
+          element: <SalaryChart></SalaryChart>
+        },
       ]
     },
     {
@@ -83,6 +94,10 @@ import EmployeeAttendance from "../pages/Home/Testimonials/EmployeeAttendance";
         {
           path: 'payment',
           element: <Payment></Payment>
+        },
+        {
+          path: 'worklog',
+          element: <Worklog></Worklog>
         },
         {
           path: 'payment-history',

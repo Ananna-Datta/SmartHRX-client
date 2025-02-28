@@ -1,35 +1,28 @@
-import { useQuery } from "@tanstack/react-query";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import { FaCheck, FaTimes, FaMoneyBill, FaStreetView } from "react-icons/fa";
-import Swal from "sweetalert2";
 import { useState } from "react";
-import { useReactTable, getCoreRowModel, flexRender } from "@tanstack/react-table";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import { FaCheck, FaTimes, FaMoneyBill, FaStreetView } from "react-icons/fa";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
-import useAuth from "../../../hooks/useAuth";
-import { Link } from "react-router-dom";
+import { useReactTable, getCoreRowModel, flexRender } from "@tanstack/react-table";
 
-const AllEmployees = () => {
+const AllEmployee = () => {
+  const navigate = useNavigate();
   const axiosPublic = useAxiosPublic();
   const axiosSecure = useAxiosSecure();
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [payModal, setPayModal] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
   const [isPaying, setIsPaying] = useState(false);
-  const { user } = useAuth();
 
   // Fetch Employees
-  const {
-    data: employees = [],
-    refetch,
-    isLoading,
-  } = useQuery({
+  const { data: employees = [], refetch, isLoading } = useQuery({
     queryKey: ["employees"],
     queryFn: async () => {
       const res = await axiosPublic.get("/users");
-      return res.data.filter(
-        (person) => person.role.toLowerCase() === "employee"
-      );
+      return res.data.filter((person) => person.role.toLowerCase() === "employee");
     },
   });
 
@@ -37,7 +30,7 @@ const AllEmployees = () => {
   const toggleVerification = async (employee) => {
     const updatedStatus = !employee.isVerified;
     axiosSecure
-      .patch(`/employees/verify/${employee._id}`, { isVerified: updatedStatus })
+      .patch(`/users/verify/${employee._id}`, { isVerified: updatedStatus })
       .then((res) => {
         if (res.data.modifiedCount > 0) {
           refetch();
@@ -95,11 +88,7 @@ const AllEmployees = () => {
       accessorKey: "isVerified",
       cell: ({ row }) => (
         <button onClick={() => toggleVerification(row.original)} className="btn btn-xs">
-          {row.original.isVerified ? (
-            <FaCheck className="text-green-500" />
-          ) : (
-            <FaTimes className="text-red-500" />
-          )}
+          {row.original.isVerified ? <FaCheck className="text-green-500" /> : <FaTimes className="text-red-500" />}
         </button>
       ),
     },
@@ -116,16 +105,16 @@ const AllEmployees = () => {
         </button>
       ),
     },
-  {
-    header: "Details",
-    accessorKey: "details",
-    cell: ({ row }) => (
-      <Link to={`/dashboard/details/${row.original.email}`}>
-        <FaStreetView />
-      </Link>
-    ),
-  },
-];
+    {
+      header: "Details",
+      accessorKey: "details",
+      cell: ({ row }) => (
+        <button onClick={() => navigate(`/details/${row.original._id}`)}>
+          <FaStreetView />
+        </button>
+      ),
+    },
+  ];
 
   // Initialize Table with TanStack React Table
   const table = useReactTable({
@@ -155,9 +144,7 @@ const AllEmployees = () => {
               {table.getRowModel().rows.map((row) => (
                 <tr key={row.id}>
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </td>
+                    <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
                   ))}
                 </tr>
               ))}
@@ -165,8 +152,6 @@ const AllEmployees = () => {
           </table>
         </div>
       )}
-
-      {/* Pay Modal */}
       {payModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg w-1/3">
@@ -205,4 +190,4 @@ const AllEmployees = () => {
   );
 };
 
-export default AllEmployees;
+export default AllEmployee;

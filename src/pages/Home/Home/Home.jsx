@@ -27,7 +27,7 @@ const Home = () => {
                 <title>SmartHRX | Home</title>
             </Helmet>
             <Banner></Banner>
-            {/* <h2 className="text-3xl">Total Users: {users.length}</h2> */} */}
+            {/* <h2 className="text-3xl">Total Users: {users.length}</h2> */} 
              {/* <Category></Category> */}
             <Services></Services>
             <Featured></Featured>
