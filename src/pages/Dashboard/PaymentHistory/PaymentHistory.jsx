@@ -55,6 +55,7 @@ const PaymentHistory = () => {
                                 <th>Month</th>
                                 <th>Year</th>
                                 <th>Amount</th>
+                                <th>Status</th>
                                 <th>Transaction Id</th>
                             </tr>
                         </thead>
@@ -65,6 +66,7 @@ const PaymentHistory = () => {
                                     <td>{payment.month}</td>
                                     <td>{payment.year}</td>
                                     <td>${payment.salary}</td>
+                                    <td>{payment.status}</td>
                                     <td>{payment.transactionId}</td>
                                 </tr>
                             ))}

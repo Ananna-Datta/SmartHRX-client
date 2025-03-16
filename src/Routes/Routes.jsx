@@ -3,20 +3,13 @@ import {
   } from "react-router-dom";
 import Main from "../Layout/Main";
 import Home from "../pages/Home/Home/Home";
-// import Menu from "../pages/Menu/Menu/Menu";
-// import Order from "../pages/Order/Order/Order";
 import Login from "../pages/Login/Login";
 import SignUp from "../pages/SignUp/SignUp";
 import PrivateRoute from "./PrivateRoute";
-// import Secret from "../pages/Shared/Secret/Secret";
 import Contact from "../pages/Contact/Contact";
 import Dashboard from "../Layout/Dashboard";
-// import Cart from "../pages/Dashboard/Cart/Cart";
 import AllUsers from "../pages/Dashboard/AllUsers/AllUsers";
-// import AddItems from "../pages/Dashboard/AddItems/AddItems";
-import AdminRoute from "./AdminRoute";
-// import ManageItems from "../pages/Dashboard/ManageItems/ManageItems";
-// import UpdateItem from "../pages/Dashboard/UpdateItem/UpdateItem";
+// import AdminRoute from "./AdminRoute";
 import Payment from "../pages/Dashboard/Payment/Payment";
 import PaymentHistory from "../pages/Dashboard/PaymentHistory/PaymentHistory";
 import UserHome from "../pages/Dashboard/UserHome/UserHome";
@@ -29,6 +22,8 @@ import EmployeePerformance from "../pages/Home/Testimonials/EmployeePerformance"
 import EmployeeAttendance from "../pages/Home/Testimonials/EmployeeAttendance";
 import SalaryChart from "../pages/Dashboard/Details/SalaryChart";
 import Worklog from "../pages/Dashboard/AllUsers/Worklog";
+import AdminMessages from "../pages/Dashboard/AdminHome/AdminMessages";
+// import Adhome from "../pages/Dashboard/AdminHome/Adhome";
 
 
   export const router = createBrowserRouter([
@@ -67,7 +62,7 @@ import Worklog from "../pages/Dashboard/AllUsers/Worklog";
         { 
           path: "details/:id",  // Ensure it's properly nested with "dashboard"
           element: <ViewDetails />,
-          loader: ({ params }) => fetch(`/details/${params.id}`), // Fetch data based on the id parameter
+          loader: ({ params }) => fetch(`https://smart-hrx-server.vercel.app/details/${params.id}`), // Fetch data based on the id parameter
         },
         { 
           path: "salary",  // Ensure it's properly nested with "dashboard"
@@ -87,13 +82,17 @@ import Worklog from "../pages/Dashboard/AllUsers/Worklog";
         { 
           path: "details/:id",  // Ensure it's properly nested with "dashboard"
           element: <ViewDetails />,
-          loader: ({ params }) => fetch(`/details/${params.id}`), // Fetch data based on the id parameter
+          loader: ({ params }) => fetch(`https://smart-hrx-server.vercel.app/details/${params.id}`), // Fetch data based on the id parameter
         },
       
         
         {
           path: 'payment',
           element: <Payment></Payment>
+        },
+        {
+          path: 'messages',
+          element: <AdminMessages></AdminMessages>
         },
         {
           path: 'worklog',
@@ -109,11 +108,6 @@ import Worklog from "../pages/Dashboard/AllUsers/Worklog";
           path: 'adminHome',
           element:<AdminHome></AdminHome>
         },
-        // {
-        //   path: 'updateItem/:id',
-        //   element: <AdminRoute><UpdateItem></UpdateItem></AdminRoute>,
-        //   loader: ({params}) => fetch(`https://bistro-boss-server-seven-sage.vercel.app/menu/${params.id}`)
-        // },
         {
           path: 'users',
           element: <AllUsers></AllUsers>

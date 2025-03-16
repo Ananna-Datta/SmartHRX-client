@@ -9,6 +9,8 @@ import { useQuery } from "@tanstack/react-query";
 import Services from "../../Login/Sevices/Services";
 import EmployeePerformance from "../Testimonials/EmployeePerformance";
 import EmployeeAttendance from "../Testimonials/EmployeeAttendance";
+import CompanyNews from "../Testimonials/CompanyNews";
+import EmployeeBenefits from "../Testimonials/EmployeeBenefits";
 
 const Home = () => {
 
@@ -32,7 +34,9 @@ const Home = () => {
             <Services></Services>
             <Featured></Featured>
             <Testimonials></Testimonials>
+            <CompanyNews></CompanyNews>
             <EmployeePerformance></EmployeePerformance>
+            <EmployeeBenefits></EmployeeBenefits>
             <EmployeeAttendance></EmployeeAttendance>
 
 

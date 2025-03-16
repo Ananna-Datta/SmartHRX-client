@@ -2,50 +2,66 @@ import { useState } from "react";
 import axios from "axios";
 
 const Contact = () => {
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false); // For handling loading state
+  const [error, setError] = useState(""); // For displaying errors
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
+    // Correctly accessing form values
+    const email = e.target.elements.email.value;
+    const message = e.target.elements.message.value;
+
+    console.log(email, message);  // This logs the form data for testing
+
+    setLoading(true);
+    setError(""); // Clear previous error
+
     try {
-      await axios.post("https://your-firebase-function-url/messages", {
+      // Sending data to backend
+      await axios.post("https://smart-hrx-server.vercel.app/messages", {
         email,
         message,
-        timestamp: new Date(),
       });
+
       alert("Message sent successfully!");
-      setEmail("");
-      setMessage("");
+      // Reset the form
+      e.target.reset();
     } catch (error) {
       console.error("Error sending message:", error);
-      alert("Failed to send message.");
+      setError("Failed to send message. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-lg mx-auto  p-6 bg-white shadow-md rounded-lg">
+    <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
       <h2 className="text-2xl font-bold mb-4">Contact Us</h2>
-      <p className="text-gray-600">Company Address: Dhaka,Bangladesh</p>
+      <p className="text-gray-600">We would love to hear from you!</p>
+
+      {error && <div className="text-red-500 mb-4">{error}</div>}
 
       <form onSubmit={handleSubmit} className="mt-4">
         <input
           type="email"
+          name="email"
           placeholder="Your Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
           required
           className="w-full p-2 border rounded mb-3"
         />
         <textarea
           placeholder="Your Message"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          name="message"
           required
           className="w-full p-2 border rounded mb-3"
         />
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-          Send Message
+        <button
+          type="submit"
+          className="bg-blue-500 text-white px-4 py-2 rounded w-full"
+          disabled={loading} // Disable the button while loading
+        >
+          {loading ? "Sending..." : "Send Message"}
         </button>
       </form>
     </div>

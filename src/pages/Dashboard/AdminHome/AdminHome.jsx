@@ -1,157 +1,78 @@
-import { useQuery } from '@tanstack/react-query';
-import useAuth from '../../../hooks/useAuth'
-import useAxiosSecure from '../../../hooks/useAxiosSecure';
-import { FaBook, FaDollarSign, FaUsers } from 'react-icons/fa';
-import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, PieChart, Pie, Legend } from 'recharts';
 
-const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', 'red', 'pink'];
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+import useAuth from '../../../hooks/useAuth'
+import admin from '../../../assets/home/admin.jpg'
 
 const AdminHome = () => {
     const { user } = useAuth();
-    const axiosSecure = useAxiosSecure();
-
-    const { data: stats = {} } = useQuery({
-        queryKey: ['admin-stats'],
-        queryFn: async () => {
-            const res = await axiosSecure.get('/admin-stats');
-            return res.data;
-        }
-    });
-
-    const { data: chartData = [] } = useQuery({
-        queryKey: ['order-stats'],
-        queryFn: async () => {
-            const res = await axiosSecure.get('/order-stats');
-            return res.data;
-        }
-    })
-
-    // custom shape for the bar chart
-    const getPath = (x, y, width, height) => {
-        return `M${x},${y + height}C${x + width / 3},${y + height} ${x + width / 2},${y + height / 3}
-        ${x + width / 2}, ${y}
-        C${x + width / 2},${y + height / 3} ${x + (2 * width) / 3},${y + height} ${x + width}, ${y + height}
-        Z`;
-    };
-
-    const TriangleBar = (props) => {
-        const { fill, x, y, width, height } = props;
-
-        return <path d={getPath(x, y, width, height)} stroke="none" fill={fill} />;
-    };
-
-    // custom shape for the pie chart
-    const RADIAN = Math.PI / 180;
-    const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
-        const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-        const x = cx + radius * Math.cos(-midAngle * RADIAN);
-        const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-        return (
-            <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-                {`${(percent * 100).toFixed(0)}%`}
-            </text>
-        );
-    };
-
-    const pieChartData = chartData.map(data => {
-        return {name: data.category, value: data.revenue}
-    })
-
+    console.log(user);
+  
     return (
-        <div>
-            <h2 className="text-3xl">
-                <span>Hi, Welcome </span>
-                {
-                    user?.displayName ? user.displayName : 'Back'
-                }
-            </h2>
-            <div className="stats shadow">
-
-                <div className="stat">
-                    <div className="stat-figure text-secondary">
-                        <FaDollarSign className='text-3xl'></FaDollarSign>
-                    </div>
-                    <div className="stat-title">Revenue</div>
-                    <div className="stat-value">${stats.revenue}</div>
-                    <div className="stat-desc">Jan 1st - Feb 1st</div>
-                </div>
-
-                <div className="stat">
-                    <div className="stat-figure text-secondary">
-                        <FaUsers className='text-3xl'></FaUsers>
-                    </div>
-                    <div className="stat-title">Users</div>
-                    <div className="stat-value">{stats.users}</div>
-                    <div className="stat-desc">↗︎ 400 (22%)</div>
-                </div>
-
-
-                <div className="stat">
-                    <div className="stat-figure text-secondary">
-                        <FaBook className='text-3xl'></FaBook>
-                    </div>
-                    <div className="stat-title">Menu Items</div>
-                    <div className="stat-value">{stats.menuItems}</div>
-                    <div className="stat-desc">↗︎ 400 (22%)</div>
-                </div>
-
-                <div className="stat">
-                    <div className="stat-figure text-secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-8 h-8 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
-                    </div>
-                    <div className="stat-title">Orders</div>
-                    <div className="stat-value">{stats.orders}</div>
-                    <div className="stat-desc">↘︎ 90 (14%)</div>
-                </div>
-
+        <div className="min-h-screen bg-gray-50 p-8">
+          {/* Image & Info Section */}
+          <div className="bg-white p-6 rounded-lg shadow-lg flex items-center space-x-6 mb-8">
+            {/* Image */}
+            <img
+              src={user?.photoURL || admin}
+              alt="User Avatar"
+              className="w-24 h-24 rounded-full object-cover"
+            />
+    
+            {/* User Info */}
+            <div>
+              <h2 className="text-2xl font-semibold text-gray-800">{user?.displayName || "Ananna Datta"}</h2>
+              <p className="text-lg text-gray-600">{user?.email || "admin@example.com"}</p>
+              <p className="text-md text-gray-500 mt-2">
+                {user?.bio || "I am a web developer, focusing on creating secure, user-friendly systems."}
+              </p>
             </div>
-            <div className="flex">
-                <div className="w-1/2">
-                    <BarChart
-                        width={500}
-                        height={300}
-                        data={chartData}
-                        margin={{
-                            top: 20,
-                            right: 30,
-                            left: 20,
-                            bottom: 5,
-                        }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="category" />
-                        <YAxis />
-                        <Bar dataKey="quantity" fill="#8884d8" shape={<TriangleBar />} label={{ position: 'top' }}>
-                            {chartData.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={colors[index % 6]} />
-                            ))}
-                        </Bar>
-                    </BarChart>
-                </div>
-                <div className="w-1/2">
-                    <PieChart width={400} height={400}>
-                        <Pie
-                            data={pieChartData}
-                            cx="50%"
-                            cy="50%"
-                            labelLine={false}
-                            label={renderCustomizedLabel}
-                            outerRadius={80}
-                            fill="#8884d8"
-                            dataKey="value"
-                        >
-                            {pieChartData.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                            ))}
-                        </Pie>
-                        <Legend></Legend>
-                    </PieChart>
-                </div>
+          </div>
+    
+          {/* Admin Dashboard Info Section */}
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h1 className="text-3xl font-bold text-indigo-700 mb-4">Admin Dashboard</h1>
+            <p className="text-lg text-gray-600">
+              Welcome to the Admin dashboard, where you can manage all users and monitor key activities.
+            </p>
+          </div>
+    
+          {/* Quick Stats Section */}
+          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center justify-center space-y-4">
+              <div className="text-4xl font-bold text-indigo-600">250</div>
+              <div className="text-xl text-gray-700">Total Employees</div>
             </div>
+    
+            <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center justify-center space-y-4">
+              <div className="text-4xl font-bold text-indigo-600">45</div>
+              <div className="text-xl text-gray-700">Active Employees</div>
+            </div>
+    
+            <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center justify-center space-y-4">
+              <div className="text-4xl font-bold text-indigo-600">5</div>
+              <div className="text-xl text-gray-700">Pending Approvals</div>
+            </div>
+          </div>
+    
+          {/* Latest Activities Section */}
+          <div className="mt-8 bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Latest Activities</h2>
+            <ul className="space-y-4">
+              <li className="flex justify-between items-center py-2 px-4 border-b border-gray-200">
+                <span className="text-gray-700">John Doe added a new employee</span>
+                <span className="text-gray-500 text-sm">2 hours ago</span>
+              </li>
+              <li className="flex justify-between items-center py-2 px-4 border-b border-gray-200">
+                <span className="text-gray-700">Jane Smith updated her profile</span>
+                <span className="text-gray-500 text-sm">5 hours ago</span>
+              </li>
+              <li className="flex justify-between items-center py-2 px-4 border-b border-gray-200">
+                <span className="text-gray-700">David Lee requested a leave</span>
+                <span className="text-gray-500 text-sm">1 day ago</span>
+              </li>
+            </ul>
+          </div>
         </div>
-    );
-};
-
-export default AdminHome;
+      );
+    };
+    
+    export default AdminHome;

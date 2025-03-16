@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
 import { app } from "../firebase/firebase.config";
 import useAxiosPublic from "../hooks/useAxiosPublic";
+import Swal from "sweetalert2";
 
 export const AuthContext = createContext(null);
 
@@ -10,7 +11,7 @@ const auth = getAuth(app);
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null); // New state to store errors
+    const [error, setError] = useState(null);
     const googleProvider = new GoogleAuthProvider();
     const axiosPublic = useAxiosPublic();
 
@@ -20,6 +21,13 @@ const AuthProvider = ({ children }) => {
             await createUserWithEmailAndPassword(auth, email, password);
         } catch (err) {
             setError(err.message); // Handle errors
+            Swal.fire({
+                icon: 'error',
+                title: 'Sign-Up Failed',
+                text: err.message,
+                confirmButtonText: 'Okay',
+                confirmButtonColor: '#FF5733',
+            });
         } finally {
             setLoading(false);
         }
@@ -30,7 +38,14 @@ const AuthProvider = ({ children }) => {
         try {
             await signInWithEmailAndPassword(auth, email, password);
         } catch (err) {
-            setError(err.message); // Handle errors
+            setError(err.message);
+            Swal.fire({
+                icon: 'error',
+                title: 'Sign-In Failed',
+                text: err.message,
+                confirmButtonText: 'Okay',
+                confirmButtonColor: '#FF5733',
+            });
         } finally {
             setLoading(false);
         }
@@ -39,9 +54,26 @@ const AuthProvider = ({ children }) => {
     const googleSignIn = async () => {
         setLoading(true);
         try {
-            await signInWithPopup(auth, googleProvider);
+            const result = await signInWithPopup(auth, googleProvider);
+            const userInfo = {
+                email: result.user?.email,
+                name: result.user?.displayName,
+            };
+            // Optionally, you can store user information in your database if needed
+            axiosPublic.post('/users', userInfo)
+                .then(res => {
+                    console.log(res.data);
+                })
+                .catch(err => setError(err.message));
         } catch (err) {
             setError(err.message); // Handle errors
+            Swal.fire({
+                icon: 'error',
+                title: 'Sign-In Failed',
+                text: err.message,
+                confirmButtonText: 'Okay',
+                confirmButtonColor: '#FF5733',
+            });
         } finally {
             setLoading(false);
         }
@@ -51,8 +83,22 @@ const AuthProvider = ({ children }) => {
         setLoading(true);
         try {
             await signOut(auth);
+            Swal.fire({
+                icon: 'success',
+                title: 'Logged Out',
+                text: 'You have successfully logged out!',
+                confirmButtonText: 'Okay',
+                confirmButtonColor: '#4CAF50',
+            });
         } catch (err) {
-            setError(err.message); // Handle errors
+            setError(err.message);
+            Swal.fire({
+                icon: 'error',
+                title: 'Logout Failed',
+                text: `Error: ${err.message}`,
+                confirmButtonText: 'Okay',
+                confirmButtonColor: '#FF5733',
+            });
         } finally {
             setLoading(false);
         }
@@ -65,39 +111,29 @@ const AuthProvider = ({ children }) => {
             });
         } catch (err) {
             setError(err.message); // Handle errors
+            Swal.fire({
+                icon: 'error',
+                title: 'Profile Update Failed',
+                text: err.message,
+                confirmButtonText: 'Okay',
+                confirmButtonColor: '#FF5733',
+            });
         }
     };
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, currentUser => {
-            setUser(currentUser);
-            // if (currentUser) {
-            //     // get token and store client
-            //     const userInfo = { email: currentUser.email };
-            //     axiosPublic.post('/jwt', userInfo)
-            //         .then(res => {
-            //             if (res.data.token) {
-            //                 localStorage.setItem('access-token', res.data.token);
-            //                 setLoading(false);
-            //             }
-            //         })
-            //         .catch(err => setError(err.message)); // Handle axios errors
-            // }
-            // else {
-            //     // Remove token when user logs out
-            //     localStorage.removeItem('access-token');
-            //     setLoading(false);
-            // }
+            setUser(currentUser); // Firebase manages user state automatically
+            setLoading(false); // Stop loading once user state is updated
         });
-        return () => {
-            return unsubscribe();
-        }
-    }, [axiosPublic]);
+
+        return () => unsubscribe(); // Clean up the observer on unmount
+    }, []);
 
     const authInfo = {
         user,
         loading,
-        error, // Include error in the context
+        error,
         createUser,
         signIn,
         googleSignIn,

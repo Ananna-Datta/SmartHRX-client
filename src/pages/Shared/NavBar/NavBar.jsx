@@ -5,7 +5,7 @@ import useAdmin from "../../../hooks/useAdmin";
 
 const NavBar = () => {
   const { user, logOut } = useContext(AuthContext);
-  const [isAdmin] = useAdmin();
+  // const [isAdmin] = useAdmin();
 
   const handleLogOut = () => {
     logOut()
@@ -36,7 +36,7 @@ const NavBar = () => {
         </li>
       )} */}
       <li>
-        <Link to="/dashboard/adminHome">Dashboard</Link>
+        <Link to="/dashboard">Dashboard</Link>
       </li>
     </>
   );
@@ -64,7 +64,7 @@ const NavBar = () => {
             </label>
             <ul
               tabIndex={0}
-              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-slate-500 rounded-box w-52"
             >
               {navOptions}
             </ul>

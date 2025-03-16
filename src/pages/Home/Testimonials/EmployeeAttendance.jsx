@@ -1,5 +1,6 @@
 import React from "react";
 import { FaClock, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import SectionTitle from "../../../components/SectionTitle/SectionTitle";
 
 const EmployeeAttendance = () => {
   // Static mock data for attendance and working hours
@@ -26,7 +27,10 @@ const EmployeeAttendance = () => {
 
   return (
     <div className="container mx-auto py-8">
-      <h2 className="text-3xl text-center mb-8">Employee Working Hours & Attendance</h2>
+      <SectionTitle
+                subHeading="Monitoring Productivity & Time Management"
+                heading="Employee Working Hours & Attendance"
+            />
       <div className="grid md:grid-cols-3 gap-6">
         {employees.map((employee) => (
           <div

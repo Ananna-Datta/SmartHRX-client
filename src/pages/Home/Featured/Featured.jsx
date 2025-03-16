@@ -13,9 +13,7 @@ const Featured = () => {
                         This month, we are featuring an exceptional employee who has demonstrated outstanding performance in all aspects of their role.
                         From leadership to teamwork, this individual has set a remarkable example for the entire team. Their commitment to excellence is truly inspiring!
                     </p>
-                    <button className="btn btn-outline border-0 border-b-4 mt-4">
-                        View Profile
-                    </button>
+                    
                 </div>
             </div>
         </div>

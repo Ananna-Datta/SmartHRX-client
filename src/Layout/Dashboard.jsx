@@ -32,7 +32,7 @@ const Dashboard = () => {
     return (
         <div className="flex">
             {/* Sidebar */}
-            <div className="w-64 min-h-screen bg-orange-400 pt-9">
+            <div className="w-64 min-h-screen bg-[#348BE9] text-white pt-9">
                 <ul className="menu p-4">
                     {role === "admin" && (
                         <>
@@ -49,6 +49,11 @@ const Dashboard = () => {
                             <li>
                                 <NavLink to="/dashboard/payment">
                                     <FaMoneyCheck /> Payroll
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/messages">
+                                    <FaMoneyCheck /> All Messages
                                 </NavLink>
                             </li>
                             

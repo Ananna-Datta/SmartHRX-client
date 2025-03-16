@@ -21,7 +21,7 @@ const Payment = () => {
   // Handle Payment Processing
   const handlePay = async (payrollId, index) => {
     try {
-      const res = await axios.patch(`http://localhost:5000/payroll/pay/${payrollId}`);
+      const res = await axios.patch(`https://smart-hrx-server.vercel.app/payroll/pay/${payrollId}`);
 
       if (res.data.message === "Payment successful") {
         // Update UI instantly
