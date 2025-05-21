@@ -1,8 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import Banner from "../Banner/Banner";
-import Category from "../Category/Category";
 import Featured from "../Featured/Featured";
-import PopularMenu from "../PopularMenu/PopularMenu";
 import Testimonials from "../Testimonials/Testimonials";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
@@ -11,6 +9,8 @@ import EmployeePerformance from "../Testimonials/EmployeePerformance";
 import EmployeeAttendance from "../Testimonials/EmployeeAttendance";
 import CompanyNews from "../Testimonials/CompanyNews";
 import EmployeeBenefits from "../Testimonials/EmployeeBenefits";
+import Team from "./Team";
+import FAQ from "./FAQ.JSX";
 
 const Home = () => {
 
@@ -37,7 +37,9 @@ const Home = () => {
             <CompanyNews></CompanyNews>
             <EmployeePerformance></EmployeePerformance>
             <EmployeeBenefits></EmployeeBenefits>
+            <Team></Team>
             <EmployeeAttendance></EmployeeAttendance>
+            <FAQ></FAQ>
 
 
         </div>
